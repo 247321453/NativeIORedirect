@@ -1,7 +1,7 @@
 #if !defined (__ELF_COMMON_H__)
 #define __ELF_COMMON_H__
 
-#include <elf.h>
+#include "elf.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,10 +32,53 @@
 #endif
 
 
+#if defined(__LP64__)
+#define ElfW(type) Elf64_ ## type
+static inline ElfW(Word) elf_r_sym(ElfW(Xword) info) { return ELF64_R_SYM(info); }
+static inline ElfW(Xword) elf_r_type(ElfW(Xword) info) { return ELF64_R_TYPE(info); }
+#else
 #define ElfW(type) Elf32_ ## type
-//#define ElfW(type) Elf64_ ## type
+static inline ElfW(Word) elf_r_sym(ElfW(Word) info) { return ELF32_R_SYM(info); }
+static inline ElfW(Word) elf_r_type(ElfW(Word) info) { return ELF32_R_TYPE(info); }
+#endif
+
+#if defined(__arm__)
+#define R_GENERIC_JUMP_SLOT R_ARM_JUMP_SLOT
+#define R_GENERIC_GLOB_DAT  R_ARM_GLOB_DAT
+#define R_GENERIC_RELATIVE  R_ARM_RELATIVE
+#define R_GENERIC_IRELATIVE R_ARM_IRELATIVE
+#define R_GENERIC_ABS       R_ARM_ABS32
+#elif defined(__aarch64__)
+#define R_GENERIC_JUMP_SLOT R_AARCH64_JUMP_SLOT
+#define R_GENERIC_GLOB_DAT  R_AARCH64_GLOB_DAT
+#define R_GENERIC_RELATIVE  R_AARCH64_RELATIVE
+#define R_GENERIC_IRELATIVE R_AARCH64_IRELATIVE
+#define R_GENERIC_ABS       R_AARCH64_ABS64
+#elif defined(__i386__)
+#define R_GENERIC_JUMP_SLOT R_386_JMP_SLOT
+#define R_GENERIC_GLOB_DAT  R_386_GLOB_DAT
+#define R_GENERIC_RELATIVE  R_386_RELATIVE
+#define R_GENERIC_IRELATIVE R_386_IRELATIVE
+#define R_GENERIC_ABS       R_386_32
+#elif defined(__mips__)
+#define R_GENERIC_JUMP_SLOT R_MIPS_JUMP_SLOT
+#define R_GENERIC_GLOB_DAT  R_MIPS_GLOB_DAT
+#define R_GENERIC_RELATIVE  R_MIPS_RELATIVE
+#define R_GENERIC_IRELATIVE R_MIPS_IRELATIVE
+#define R_GENERIC_ABS       R_MIPS_ABS32
+#elif defined(__x86_64__)
+#define R_GENERIC_JUMP_SLOT R_X86_64_JUMP_SLOT
+#define R_GENERIC_GLOB_DAT  R_X86_64_GLOB_DAT
+#define R_GENERIC_RELATIVE  R_X86_64_RELATIVE
+#define R_GENERIC_IRELATIVE R_X86_64_IRELATIVE
+#define R_GENERIC_ABS       R_X86_64_32S
+#endif
+
+
+
 
 #define powerof2(x)     ((((x)-1)&(x))==0)
+#define SOINFO_NAME_LEN (128)
 
 inline static int GetTargetElfMachine()
 {
