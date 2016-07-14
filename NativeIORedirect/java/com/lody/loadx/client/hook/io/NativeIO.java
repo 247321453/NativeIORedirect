@@ -28,6 +28,7 @@ public class NativeIO {
     }
 
 
+    public static native int test();
     /**
      * Enable Native Hook and open the IO Redirect.
      *

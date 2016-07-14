@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stddef.h>
+#include <fcntl.h>
 #include "XJniHook.h"
 #include "core/RedirectManager.h"
 #include "Logger.h"
@@ -10,7 +11,27 @@ jint Java_com_lody_loadx_client_hook_io_NativeIO_open(JNIEnv* env,jobject thiz) 
     r.init();
 	return 0;
 }
+jint Java_com_lody_loadx_client_hook_io_NativeIO_test(JNIEnv* env,jobject thiz){
+	char temp[]="hello,abc!";
 
+	int fd = 0;
+
+	char pathname[255];
+
+	if((fd=open("/data/data/com.wadahana.testhook/a.txt",O_WRONLY|O_CREAT,0640))==-1)
+
+	{
+		return -1;
+	}else{
+
+		int len=strlen(temp)+1;
+
+		write(fd,temp,len);
+
+		close(fd);
+		return 0;
+	}
+}
 
 static char* jstringToChar(JNIEnv* env, jstring jstr)
 {

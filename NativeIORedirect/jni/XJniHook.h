@@ -8,6 +8,7 @@ extern "C" {
 #endif
 
 jint Java_com_lody_loadx_client_hook_io_NativeIO_open(JNIEnv* env,jobject thiz);
+jint Java_com_lody_loadx_client_hook_io_NativeIO_test(JNIEnv* env,jobject thiz);
 
 void Java_com_lody_loadx_client_hook_io_NativeIO_nativeRedirectFolder(JNIEnv* env,jobject thiz, jstring originDir, jstring newDir);
 
