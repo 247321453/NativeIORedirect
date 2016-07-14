@@ -43,6 +43,12 @@ HOOK(int, open, const char *file, int flag)
   return ORIGCALL(open, NEWPATH, flag);
 }
 
+HOOK(int, fopen, const char * path,const char * mode)
+{
+  REDIRECT(path);
+  return ORIGCALL(fopen, NEWPATH, mode);
+}
+
 HOOK(int, link, const char *path1, const char *path2)
 {
   REDIRECT2(path1, path2);
@@ -205,7 +211,7 @@ static bool needInitPreHook = true;
 
 static bool __prehook(const char* module_name, const char* func_name)
 {
-    // LOGD(">>>>>>>>>>> Module Name : %s, Function Name : %s.", module_name, func_name);
+  //LOGD(">>>>>>>>>>> Module Name : %s, Function Name : %s.", module_name, func_name);
   if(strstr(module_name, "libc.so") != NULL 
     || strstr(module_name, "libdl.so") != NULL) {
     return true;

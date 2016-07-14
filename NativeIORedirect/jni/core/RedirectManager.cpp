@@ -81,6 +81,7 @@ void RedirectManager::foreach(const std::function<bool(const K&, const V&)> &cb)
 
 void RedirectManager::redirect(std::string &path) const
 { 
+   LOGD(" --- path =%s", path.c_str());
   foreach([&] (const K &o, const V &n) {
     if (startsWith(path, o)) {
       LOGD("[+++] An IO Redirect Hit.");

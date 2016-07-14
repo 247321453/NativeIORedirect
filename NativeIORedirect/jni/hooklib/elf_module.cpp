@@ -467,10 +467,11 @@ bool elf_module::hook(const char *symbol, void *replace_func, void **old_func)
     }
     else
     {
-        log_info("[+] sym %p, symidx %d.\n", sym, symidx);
+        log_info("[+] sym %p, symidx %d. slot = %d \n", sym, symidx, R_GENERIC_JUMP_SLOT);
     }
 
     int relplt_counts = this->get_is_use_rela() ? this->m_relplt_bytes / sizeof(ElfW(Rela)) : this->m_relplt_bytes / sizeof(ElfW(Rel));
+	log_info("relplt_counts = %d\n", relplt_counts);
     for (uint32_t i = 0; i < relplt_counts; i++)
     {
         unsigned long r_info = 0;   // for Elf32 it's Elf32_Word, but Elf64 it's Elf64_Xword.
@@ -491,14 +492,18 @@ bool elf_module::hook(const char *symbol, void *replace_func, void **old_func)
             void *addr = (void *) (this->get_bias_addr() + r_offset);
             if (this->replace_function(addr, replace_func, old_func))
             {
-                log_info("replace_function fail\n");
+                log_error("replace_function fail setp 1\n");
                 return false;
             }
+			log_info("replace_function 1 ok");
             break;
-        }
+        }else{
+			log_info("warring sym=%d, solt=%d",elf_r_sym(r_info), elf_r_type(r_info));
+		}
     }
 
     int reldyn_counts = this->get_is_use_rela() ? this->m_reldyn_bytes / sizeof(ElfW(Rela)) : this->m_reldyn_bytes / sizeof(ElfW(Rel));
+	log_info("reldyn_counts = %d\n", reldyn_counts);
     for (uint32_t i = 0; i < reldyn_counts; i++)
     {
         unsigned long r_info = 0;   // for Elf32 it's Elf32_Word, but Elf64 it's Elf64_Xword.
@@ -522,8 +527,10 @@ bool elf_module::hook(const char *symbol, void *replace_func, void **old_func)
             void *addr = (void *) (this->get_bias_addr() + r_offset);
             if (this->replace_function(addr, replace_func, old_func))
             {
+				log_error("replace_function fail setp 2\n");
                 return false;
             }
+			log_info("replace_function 2 ok");
         }
     }
     return true;

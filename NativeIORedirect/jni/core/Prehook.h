@@ -34,6 +34,8 @@ inlineHook(faccessat, "libc.so");
 
 inlineHook(access, "libc.so");
 
+inlineHook(fopen, "libc.so");
+
 inlineHook(open, "libc.so");
 
 inlineHook(openat, "libc.so");

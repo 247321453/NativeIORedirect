@@ -38,6 +38,8 @@ HOOKDEF(int, faccessat, int, const char *, int, int);
 
 HOOKDEF(int, open, const char*, int);
 
+HOOKDEF(int, fopen, const char *,const char *);
+
 HOOKDEF(int, openat, int, const char*, int);
 
 HOOKDEF(int, chdir, const char *);
